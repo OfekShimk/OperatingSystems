@@ -1,3 +1,5 @@
+// Ofek Shimko 207336561
+
 #include "syscall.h"
 #include "traps.h"
 
@@ -19,7 +21,12 @@
     ret
 
 // You need to add your new SYSCALL by the same way(here is a good place)
-
+#define SYSCALLPS161(name) \
+  .globl name; \
+  name: \
+    movl $61, %eax; \
+    int $T_SYSCALL; \
+    ret
 
 SYSCALLFORK(fork) //instead of SYSCALL(fork) !!!
 //SYSCALL(fork)
@@ -43,3 +50,5 @@ SYSCALL(getpid)
 SYSCALL(sbrk)
 SYSCALL(sleep)
 SYSCALL(uptime)
+SYSCALLPS161(ps161)
+
