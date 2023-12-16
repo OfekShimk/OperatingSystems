@@ -538,18 +538,20 @@ procdump(void)
 int
 ps161(){
   struct proc *p;
+  int ppid;
 
   // Enable interrupts on this processor.
   sti();
 
   // Loop over process table looking for process with pid.
   acquire(&ptable.lock);
-  cprintf("name \t pid \t state \n");
+  cprintf("name \t pid \t state \t\t ppid \n");
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    ppid = (p->pid == 1) ? 0 : p->parent->pid;
     if ( p->state == SLEEPING )
-      cprintf("%s \t %d  \t SLEEPING \n ", p->name, p->pid );
+      cprintf("%s \t %d \t SLEEPING \t %d \n ", p->name, p->pid, ppid );
     else if ( p->state == RUNNING )
-      cprintf("%s \t %d  \t RUNNING \n ", p->name, p->pid );
+      cprintf("%s \t %d \t RUNNING  \t %d \n ", p->name, p->pid, ppid );
   }
 
   release(&ptable.lock);
